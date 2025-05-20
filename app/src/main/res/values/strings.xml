@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">My Application</string>
+    <string name="chatbot_icon">Chatbot Icon</string>
+    <string name="quiz_finished">Quiz Finished!</string>
+    <string name="correct_answers">Correct Answers: %d</string>
+    <string name="wrong_answers">Wrong Answers: %d</string>
+    <string name="try_again">Try Again</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="correct_answer">Correct Answer</string>
+    <string name="wrong_answer">Wrong Answer</string>
+    <string name="see_score">See Score</string>
+    <string name="next_question">Next Question</string>
+    <string name="play_again">Play Again</string>
+
+    <string-array name="quiz_questions">
+        <item>Android is an operating system.</item>
+        <item>Kotlin is officially supported for Android development.</item>
+        <item>The earth is flat.</item>
+    </string-array>
 </resources>

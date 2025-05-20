@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +47,6 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Column(modifier = Modifier.padding(innerPadding)) {
                         QuizScreenFull()
-
                     }
                 }
             }
@@ -51,14 +54,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun QuizScreenFull() {
-    val questions = listOf(
-        "Android is an operating system." to true,
-        "Kotlin is officially supported for Android development." to true,
-        "The earth is flat." to false
-    )
+    val questionsArray = stringArrayResource(id = R.array.quiz_questions)
+    val answers = listOf(true, true, false)
+    val questions = questionsArray.mapIndexed { index, question -> question to answers[index] }
     var currentIndex by remember { mutableStateOf(0) }
     var showResult by remember { mutableStateOf(false) }
     var isCorrect by remember { mutableStateOf(false) }
@@ -76,15 +76,29 @@ fun QuizScreenFull() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.chatbot),
+                contentDescription = stringResource(id = R.string.chatbot_icon),
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(bottom = 16.dp)
+            )
+
             Text(
-                text = "Quiz Finished!",
+                text = stringResource(id = R.string.quiz_finished),
                 style = MaterialTheme.typography.headlineMedium
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text("Correct Answers: $correctCount", fontSize = 20.sp)
-            Text("Wrong Answers: $wrongCount", fontSize = 20.sp)
+            Text(
+                text = stringResource(id = R.string.correct_answers, correctCount),
+                fontSize = 20.sp
+            )
+            Text(
+                text = stringResource(id = R.string.wrong_answers, wrongCount),
+                fontSize = 20.sp
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -95,10 +109,9 @@ fun QuizScreenFull() {
                 showFinalScore = false
                 showResult = false
             }) {
-                Text("Try Again")
+                Text(stringResource(id = R.string.try_again))
             }
         }
-
     } else {
         Column(
             modifier = Modifier
@@ -128,14 +141,27 @@ fun QuizScreenFull() {
                             .background(
                                 if (isCorrect) Color.Green else Color.Red,
                                 shape = CircleShape
-                            ),
-                        contentAlignment = Alignment.Center
+                            )
                     ) {
-                        Text(
-                            text = if (isCorrect) "Correct Answer" else "Wrong Answer",
-                            color = Color.Black,
-                            fontSize = 18.sp
+                        Image(
+                            painter = painterResource(id = if (isCorrect) R.drawable.correct_answer else R.drawable.wrong_answer),
+                            contentDescription = if (isCorrect) stringResource(id = R.string.correct_answer) else stringResource(id = R.string.wrong_answer),
+                            modifier = Modifier
+                                .size(180.dp)
+                                .align(Alignment.Center)
                         )
+                        Box(
+                            modifier = Modifier
+                                .size(180.dp)
+                                .align(Alignment.Center),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = if (isCorrect) stringResource(id = R.string.correct_answer) else stringResource(id = R.string.wrong_answer),
+                                color = Color.Black,
+                                fontSize = 18.sp
+                            )
+                        }
                     }
                 }
             }
@@ -156,7 +182,7 @@ fun QuizScreenFull() {
                             .weight(1f)
                             .padding(end = 8.dp)
                     ) {
-                        Text("True")
+                        Text(stringResource(id = R.string.true_button))
                     }
                     Button(
                         onClick = {
@@ -168,7 +194,7 @@ fun QuizScreenFull() {
                             .weight(1f)
                             .padding(start = 8.dp)
                     ) {
-                        Text("False")
+                        Text(stringResource(id = R.string.false_button))
                     }
                 }
             }
@@ -187,7 +213,7 @@ fun QuizScreenFull() {
                         .height(48.dp)
                         .padding(bottom = 20.dp)
                 ) {
-                    Text(if (isLastQuestion) "See Score" else "Next Question")
+                    Text(if (isLastQuestion) stringResource(id = R.string.see_score) else stringResource(id = R.string.next_question))
                 }
             }
         }
@@ -197,8 +223,9 @@ fun QuizScreenFull() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuestionText1() {
+    val questionsArray = stringArrayResource(id = R.array.quiz_questions)
     Text(
-        text = "Android is an operating system.",
+        text = questionsArray[0],
         style = MaterialTheme.typography.headlineMedium,
         modifier = Modifier
             .padding(top = 40.dp)
@@ -206,12 +233,12 @@ fun PreviewQuestionText1() {
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuestionText2() {
+    val questionsArray = stringArrayResource(id = R.array.quiz_questions)
     Text(
-        text = "Kotlin is officially supported for Android development.",
+        text = questionsArray[1],
         style = MaterialTheme.typography.headlineMedium,
         modifier = Modifier
             .padding(top = 40.dp)
